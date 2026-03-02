@@ -21,7 +21,7 @@ type StepLayoutProps = {
 
 export default function BookingTemplate({ header, children, bottomBar }: StepLayoutProps) {
     return (
-        <Box sx={{ minHeight: "100vh", bgcolor: "#F6F9FC" }} suppressHydrationWarning>
+        <Box sx={{ minHeight: "100vh", bgcolor: "#F6F9FC" }}>
             <StepHeader {...header} />
             <Container maxWidth="lg" sx={{ py: 4 }}>
                 {children}

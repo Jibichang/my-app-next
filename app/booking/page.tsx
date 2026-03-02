@@ -4,6 +4,8 @@ import { Box, Button, Card, CardContent, Stack, Typography, Chip } from "@mui/ma
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import BookingTemplate from "./BookingTemplate";
+import BookingBottomBar from "./BookingBottomBar";
+import { useRouter } from "next/navigation";
 
 type Passenger = {
     id: string;
@@ -107,6 +109,7 @@ export default function Booking() {
         [],
     );
 
+    const router = useRouter();
     const allIds = passengers.map((p) => p.id);
     const [selectedIds, setSelectedIds] = useState<string[]>(allIds);
 
@@ -117,6 +120,16 @@ export default function Booking() {
     };
 
     const noneSelected = selectedIds.length === 0;
+    const isValid = !noneSelected;
+
+    const handleBack = () => {
+        // router.back(); // กลับไปหน้าก่อนหน้า
+    };
+
+    const handleContinue = () => {
+        console.log("Saving data...", selectedIds);
+        // router.push("/next-step"); // ไปหน้าถัดไป
+    };
 
     const onBulkAction = () => {
         if (noneSelected) setSelectedIds(allIds); // Select all
@@ -133,44 +146,11 @@ export default function Booking() {
                 onClose: () => console.log("close"),
             }}
             bottomBar={
-                <Stack spacing={1.5}>
-                    <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} justifyContent="center">
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                flex: 1,
-                                maxWidth: { xs: "100%", sm: 360 },
-                                borderRadius: 2,
-                                textTransform: "none",
-                                fontWeight: 900,
-                                borderColor: "#CBD5E1",
-                                color: "#1F2937",
-                                bgcolor: "white",
-                                py: 1.4,
-                                "&:hover": { borderColor: "#94A3B8", bgcolor: "white" },
-                            }}
-                        >
-                            Back
-                        </Button>
-
-                        <Button
-                            variant="contained"
-                            disabled={noneSelected}
-                            sx={{
-                                flex: 1,
-                                maxWidth: { xs: "100%", sm: 360 },
-                                borderRadius: 2,
-                                textTransform: "none",
-                                fontWeight: 900,
-                                py: 1.4,
-                                bgcolor: "#2E79C6",
-                                "&:hover": { bgcolor: "#2566AB" },
-                            }}
-                        >
-                            Continue
-                        </Button>
-                    </Stack>
-                </Stack>
+                <BookingBottomBar
+                    onBack={handleBack}
+                    onContinue={handleContinue}
+                    isValid={isValid}
+                />
             }
         >
             <Box sx={{
