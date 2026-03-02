@@ -89,7 +89,7 @@ function IconPill({ children }: { children: React.ReactNode }) {
 
 export default function Dashboard() {
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#F6F9FC" }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "#F6F9FC" }} suppressHydrationWarning>
       {/* Top Nav */}
       <AppBar
         position="sticky"
