@@ -1,18 +1,14 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { shallow } from "zustand/shallow";
 import { Box, Button, Card, CardContent, Stack, Typography, Chip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
-import BookingTemplate from "./BookingTemplate";
-import BookingBottomBar from "./BookingBottomBar";
+import BookingTemplate from "../BookingTemplate";
+import BookingBottomBar from "../BookingBottomBar";
 import { useRouter } from "next/navigation";
-
-type Passenger = {
-    id: string;
-    name: string;
-    paxType: "ADT" | "CHD" | "INF";
-    seat: string;
-};
+import { useCheckInStore } from "../checkinStore";
+import { Passenger, MOCK_PASSENGERS } from "../bookingData";
 
 function PassengerSelectRow({
     passenger,
@@ -100,18 +96,31 @@ function PassengerSelectRow({
     );
 }
 
-export default function Booking() {
-    const passengers: Passenger[] = useMemo(
-        () => [
-            { id: "p1", name: "ALEX HUUM", paxType: "ADT", seat: "12A" },
-            { id: "p2", name: "Somsee Kuum", paxType: "ADT", seat: "12B" },
-        ],
-        [],
-    );
+export default function CheckIn() {
+    const passengers: Passenger[] = useMemo(() => MOCK_PASSENGERS, []);
 
     const router = useRouter();
     const allIds = passengers.map((p) => p.id);
-    const [selectedIds, setSelectedIds] = useState<string[]>(allIds);
+
+    const selectedPassengerIds = useCheckInStore(
+        (s) => s.selectedPassengerIds
+    );
+
+    const setPassengers = useCheckInStore(
+        (s) => s.setPassengers
+    );
+
+    const setSelectedPassengerIds = useCheckInStore(
+        (s) => s.setSelectedPassengerIds
+    );
+
+    useEffect(() => {
+        setPassengers(passengers);
+    }, [passengers, setPassengers]);
+
+    const [selectedIds, setSelectedIds] = useState<string[]>(
+        selectedPassengerIds ?? []
+    );
 
     const toggle = (id: string) => {
         setSelectedIds((prev) =>
@@ -123,12 +132,13 @@ export default function Booking() {
     const isValid = !noneSelected;
 
     const handleBack = () => {
-        // router.back(); // กลับไปหน้าก่อนหน้า
+        router.back();
     };
 
     const handleContinue = () => {
+        setSelectedPassengerIds(selectedIds);
         console.log("Saving data...", selectedIds);
-        // router.push("/next-step"); // ไปหน้าถัดไป
+        router.push("/booking/passenger");
     };
 
     const onBulkAction = () => {

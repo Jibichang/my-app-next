@@ -1,8 +1,8 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
+import { useShallow } from 'zustand/react/shallow';
 import {
     Box,
-    Button,
     Card,
     CardContent,
     Divider,
@@ -14,25 +14,9 @@ import {
 import BookingTemplate from "../BookingTemplate";
 import BookingBottomBar from "../BookingBottomBar";
 import { useRouter } from "next/navigation";
-// import CloseIcon from "@mui/icons-material/Close";
 
-type Passenger = {
-    id: string;
-    name: string;
-};
-
-type CountryOption = {
-    code: string;      // e.g. "TH"
-    name: string;      // e.g. "Thailand"
-    dialCode: string;  // e.g. "+66"
-    flag: string;      // emoji to match screenshot quickly
-};
-
-type PassengerForm = {
-    nationality: string;
-    countryCode: string; // used for dial code dropdown
-    phoneNumber: string;
-};
+import { useCheckInStore } from "../checkinStore";
+import { CountryOption, Passenger, PassengerForm, MOCK_CONTRIES } from "../bookingData";
 
 const fieldSx = {
     "& .MuiOutlinedInput-root": {
@@ -90,11 +74,7 @@ function PassengerSection({
                         Phone Number
                     </Typography>
 
-                    <Stack
-                        direction={{ xs: "column", sm: "row" }}
-                        spacing={1.5}
-                        alignItems="stretch"
-                    >
+                    <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} alignItems="stretch">
                         <TextField
                             select
                             value={value.countryCode}
@@ -117,10 +97,7 @@ function PassengerSection({
                             onChange={(e) => onChange({ ...value, phoneNumber: e.target.value })}
                             placeholder="811234567"
                             sx={fieldSx}
-                            inputProps={{
-                                inputMode: "numeric",
-                                pattern: "[0-9]*",
-                            }}
+                            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                         />
                     </Stack>
 
@@ -134,49 +111,33 @@ function PassengerSection({
 }
 
 export default function PassengerDetailsStep() {
-    const passengers: Passenger[] = useMemo(
-        () => [
-            { id: "p1", name: "ALEX HUUM" },
-            { id: "p2", name: "Somsee Kuum" },
-        ],
-        [],
-    );
-
-    const countries: CountryOption[] = useMemo(
-        () => [
-            { code: "TH", name: "Thailand", dialCode: "+66", flag: "🇹🇭" },
-            { code: "US", name: "United States", dialCode: "+1", flag: "🇺🇸" },
-            { code: "JP", name: "Japan", dialCode: "+81", flag: "🇯🇵" },
-            { code: "SG", name: "Singapore", dialCode: "+65", flag: "🇸🇬" },
-        ],
-        [],
-    );
-
-    const [forms, setForms] = useState<Record<string, PassengerForm>>({
-        p1: { nationality: "TH", countryCode: "TH", phoneNumber: "811234567" },
-        p2: { nationality: "US", countryCode: "US", phoneNumber: "5551234567" },
-    });
-
-    const updatePassenger = (id: string, next: PassengerForm) => {
-        setForms((prev) => ({ ...prev, [id]: next }));
-    };
-
-    // simple validation: require nationality + phone number
-    const isValid = passengers.every((p) => {
-        const f = forms[p.id];
-        return Boolean(f?.nationality?.trim()) && Boolean(f?.phoneNumber?.trim());
-    });
-
     const router = useRouter();
-    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    const countries: CountryOption[] = useMemo(() => MOCK_CONTRIES, []);
 
-    const handleBack = () => {
-        // router.back(); // กลับไปหน้าก่อนหน้า
-    };
+    // const passengers = useCheckInStore((s) => s.getSelectedPassengers());
+    const passengers = useCheckInStore(
+        useShallow((s) =>
+            s.passengers.filter((p) => s.selectedPassengerIds.includes(p.id))
+        )
+    );
+    const passengerForms = useCheckInStore((s) => s.passengerForms);
+    const upsertPassengerForm = useCheckInStore((s) => s.upsertPassengerForm);
+
+    const getFormValue = (id: string): PassengerForm =>
+        passengerForms[id] ?? { nationality: "", countryCode: "TH", phoneNumber: "" };
+
+    const isValid =
+        passengers.length > 0 &&
+        passengers.every((p) => {
+            const f = getFormValue(p.id);
+            return Boolean(f.nationality.trim()) && Boolean(f.phoneNumber.trim());
+        });
+
+    const handleBack = () => router.back();
 
     const handleContinue = () => {
-        console.log("Saving data...", selectedIds);
-        // router.push("/next-step"); // ไปหน้าถัดไป
+        // forms already saved in store via upsertPassengerForm
+        router.push("/booking/dangerous");
     };
 
     return (
@@ -186,15 +147,9 @@ export default function PassengerDetailsStep() {
                 subtitle: "Passenger Details",
                 step: 3,
                 totalSteps: 5,
-                onClose: () => console.log("close"),
+                onClose: () => router.back(),
             }}
-            bottomBar={
-                <BookingBottomBar
-                    onBack={handleBack}
-                    onContinue={handleContinue}
-                    isValid={isValid}
-                />
-            }
+            bottomBar={<BookingBottomBar onBack={handleBack} onContinue={handleContinue} isValid={isValid} />}
         >
             <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Card
@@ -224,11 +179,18 @@ export default function PassengerDetailsStep() {
                                     index={idx + 1}
                                     passenger={p}
                                     countries={countries}
-                                    value={forms[p.id]}
-                                    onChange={(next) => updatePassenger(p.id, next)}
+                                    value={getFormValue(p.id)}
+                                    onChange={(next) => upsertPassengerForm(p.id, next)}
                                 />
                             ))}
                         </Stack>
+
+                        {/* Optional: if no passenger selected (direct access step-3) */}
+                        {passengers.length === 0 && (
+                            <Typography sx={{ mt: 2 }} color="#DC2626" fontWeight={700} fontSize={13}>
+                                No passengers selected. Please go back and select passengers first.
+                            </Typography>
+                        )}
                     </CardContent>
                 </Card>
             </Box>
