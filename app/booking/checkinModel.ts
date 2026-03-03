@@ -54,7 +54,7 @@ export const MOCK_CONTRIES: CountryOption[] = [
 ];
 
 export const MOCK_FIGHT: BoardingPassData = {
-    pnr: "ABC123",
+    pnr: "ABC1234567890123",
     terminal: "1",
     gate: "40",
     fromCode: "BKK",

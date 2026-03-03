@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import AppleIcon from "@mui/icons-material/Apple";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import FlightIcon from "@mui/icons-material/Flight";
 import { Passenger, PassengerForm, BoardingPassData } from "../checkinModel";
-
-
+import Barcode from 'react-barcode';
 
 export function BoardingPassCard({
     passenger,
@@ -137,8 +137,20 @@ export function BoardingPassCard({
                                     borderBottom: "2px dashed #D1D5DB",
                                 }}
                             />
-                            <Stack direction="row" spacing={1} alignItems="center" sx={{ flexShrink: 0 }}>
-                                <FlightTakeoffIcon sx={{ fontSize: 16, color: "#2E79C6" }} />
+                            <Stack direction="column" alignItems="center" sx={{ flexShrink: 0 }}>
+                                <Box
+                                    sx={{
+                                        width: 24,
+                                        height: 24,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderRadius: '50%',
+                                        color: '#2E79C6',
+                                    }}
+                                >
+                                    <FlightIcon sx={{ fontSize: 16, transform: 'rotate(90deg)' }} />
+                                </Box>
                                 <Paper
                                     variant="outlined"
                                     sx={{
@@ -216,20 +228,37 @@ export function BoardingPassCard({
                 >
                     <Box
                         sx={{
-                            height: 60,
+                            mt: 1,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
                             width: "100%",
-                            borderRadius: 1,
-                            bgcolor: "#FFFFFF",
-                            backgroundImage:
-                                "repeating-linear-gradient(90deg, #111827 0, #111827 3px, transparent 3px, transparent 6px)",
-                            mx: "auto",
-                            maxWidth: 340,
+                            overflow: "hidden"
                         }}
-                    />
-                    <Typography fontSize={12} color="#6B7280" fontWeight={600} sx={{ mt: 1.25 }}>
-                        Scan at security and boarding gate
-                    </Typography>
+                    >
+                        <Barcode
+                            value={data.pnr || "BOARDINGPASS"}
+                            width={1.2}
+                            height={60}
+                            displayValue={false}
+                            background="transparent"
+                            lineColor="#111827"
+                            margin={0}
+                        />
+                    </Box>
                 </Paper>
+
+                <Typography fontSize={12}
+                    color="#6B7280"
+                    fontWeight={600}
+                    sx={{
+                        mt: 1.25,
+                        textAlign: "center",
+                        width: "100%",
+                        display: "block"
+                    }}>
+                    Scan at security and boarding gate
+                </Typography>
 
                 {/* Apple Wallet */}
                 <Button

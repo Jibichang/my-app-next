@@ -4,14 +4,6 @@ import Dashboard from "./dashboard/page";
 
 export default function Home() {
   return (
-    // <html lang="en">
-    //   <body>
-    //     <AppRouterCacheProvider>
-
-    //       < Dashboard />
-    //     </AppRouterCacheProvider>
-    //   </body>
-    // </html>
     <Dashboard />
   );
 }
