@@ -5,31 +5,12 @@ import { Button, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 import BookingTemplate from "../BookingTemplate";
 import { useCheckInStore } from "../checkinStore";
-import { BoardingPassData } from "../checkinModel";
+import { BoardingPassData, MOCK_FIGHT } from "../checkinModel";
 import { BoardingPassCard } from "./BoardingPassCard";
 
 export default function Boarding() {
     const router = useRouter();
-
-    const data: BoardingPassData = {
-        pnr: "ABC123",
-        terminal: "1",
-        gate: "40",
-        fromCode: "BKK",
-        fromName: "Suvarnabhumi Airport, Bangkok",
-        fromDate: "19 Feb 2026",
-        toCode: "SIN",
-        toName: "Changi International Airport, Singapore",
-        toDate: "20 Feb 2026",
-        flightNo: "QL123",
-        zone: "1",
-        seq: "023",
-        boardingTime: "21:14",
-        departTime: "14:54",
-        departDate: "Thu • 19 Feb 2026",
-        arriveTime: "17:54",
-        arriveDate: "Fri • 20 Feb 2026",
-    };
+    const boarding: BoardingPassData = MOCK_FIGHT;
 
     const resetStore = useCheckInStore((s) => s.resetStore);
     const handleDone = () => {
@@ -37,12 +18,12 @@ export default function Boarding() {
         router.push("/dashboard");
     };
 
+    const passengerForms = useCheckInStore((s) => s.passengerForms);
     const selectedPassengers = useCheckInStore(
         useShallow((s) =>
             s.passengers.filter((p) => s.selectedPassengerIds.includes(p.id))
         )
     );
-    const passengerForms = useCheckInStore((s) => s.passengerForms);
 
     return (
         <BookingTemplate
@@ -79,7 +60,7 @@ export default function Boarding() {
                         key={p.id}
                         passenger={p}
                         form={passengerForms[p.id]}
-                        data={data}
+                        data={boarding}
                     />
                 ))}
             </Stack>

@@ -5,6 +5,7 @@ import {
 } from "@mui/material";
 import { StepHeader } from "./BookingStepHeader";
 import { useRouter } from "next/navigation";
+import { useCheckInStore } from "./checkinStore";
 
 export type StepHeaderProps = {
     title: string;
@@ -22,8 +23,10 @@ type BookingTemplateProps = {
 
 export default function BookingTemplate({ header, children, bottomBar }: BookingTemplateProps) {
     const router = useRouter();
+    const resetStore = useCheckInStore((s) => s.resetStore);
 
     const handleClose = () => {
+        resetStore();
         if (header.onClose) {
             header.onClose();
         } else {
