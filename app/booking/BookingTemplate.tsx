@@ -21,37 +21,52 @@ type StepLayoutProps = {
 
 export default function BookingTemplate({ header, children, bottomBar }: StepLayoutProps) {
     return (
-        <Box sx={{ minHeight: "100vh", bgcolor: "#F6F9FC" }}>
-            <StepHeader {...header} />
-            <Container
-                maxWidth="lg"
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100vh",
+                bgcolor: "#F6F9FC",
+                overflow: "hidden",
+            }}
+        >
+            <Box sx={{ flexShrink: 0 }}>
+                <StepHeader {...header} />
+            </Box>
+
+            {/* 2. Content Area */}
+            <Box
+                component="main"
                 sx={{
-                    px: { xs: 2, md: 3 },
-                    pt: { xs: 3, md: 5 },
-                    pb: bottomBar ? { xs: 20, md: 16 } : { xs: 3, md: 5 },
-                    minHeight: "100%",
+                    flexGrow: 1,
+                    overflowY: "auto",
+                    WebkitOverflowScrolling: "touch",
+                    pt: { xs: 2, md: 4 },
+                    pb: bottomBar ? { xs: 4, md: 6 } : 4,
                 }}
             >
-                {children}
-            </Container>
-            {bottomBar ? (
+                <Container maxWidth="lg" sx={{ px: { xs: 2, md: 3 } }}>
+                    {children}
+                </Container>
+            </Box>
+
+            {/* 3. Bottom Bar */}
+            {bottomBar && (
                 <Paper
                     elevation={0}
                     sx={{
-                        position: "fixed",
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
+                        flexShrink: 0,
                         bgcolor: "#F3F7FB",
                         borderTop: "1px solid #E5E7EB",
-                        py: { xs: 1.5, md: 2 },
+                        py: { xs: 2, md: 2.5 },
+                        width: "100%",
                     }}
                 >
                     <Container maxWidth="lg" sx={{ px: { xs: 2, md: 3 } }}>
                         {bottomBar}
                     </Container>
                 </Paper>
-            ) : null}
+            )}
         </Box>
     );
 }
