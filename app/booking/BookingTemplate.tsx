@@ -23,7 +23,15 @@ export default function BookingTemplate({ header, children, bottomBar }: StepLay
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "#F6F9FC" }}>
             <StepHeader {...header} />
-            <Container maxWidth="lg" sx={{ py: 4 }}>
+            <Container
+                maxWidth="lg"
+                sx={{
+                    px: { xs: 2, md: 3 },
+                    pt: { xs: 3, md: 5 },
+                    pb: bottomBar ? { xs: 20, md: 16 } : { xs: 3, md: 5 },
+                    minHeight: "100%",
+                }}
+            >
                 {children}
             </Container>
             {bottomBar ? (
