@@ -21,6 +21,26 @@ export type CountryOption = {
     flag: string;      // emoji to match screenshot quickly
 };
 
+export type BoardingPassData = {
+    pnr: string;
+    terminal: string;
+    gate: string;
+    fromCode: string; // BKK
+    fromName: string; // Suvarnabhumi Airport, Bangkok
+    fromDate: string; // 19 Feb 2026
+    toCode: string; // SIN
+    toName: string; // Changi International Airport, Singapore
+    toDate: string; // 20 Feb 2026
+    flightNo: string; // QL123
+    zone: string;
+    seq: string;
+    boardingTime: string; // 21:14
+    departTime: string; // 14:54
+    departDate: string; // Thu • 19 Feb 2026
+    arriveTime: string; // 17:54
+    arriveDate: string; // Fri • 20 Feb 2026
+};
+
 export const MOCK_PASSENGERS: Passenger[] = [
     { id: "p1", name: "ALEX HUUM", paxType: "ADT", seat: "12A" },
     { id: "p2", name: "Somsee Kuum", paxType: "ADT", seat: "12B" },
@@ -32,3 +52,23 @@ export const MOCK_CONTRIES: CountryOption[] = [
     { code: "JP", name: "Japan", dialCode: "+81", flag: "🇯🇵" },
     { code: "SG", name: "Singapore", dialCode: "+65", flag: "🇸🇬" },
 ];
+
+export const MOCK_FIGHT: BoardingPassData = {
+    pnr: "ABC123",
+    terminal: "1",
+    gate: "40",
+    fromCode: "BKK",
+    fromName: "Suvarnabhumi Airport, Bangkok",
+    fromDate: "19 Feb 2026",
+    toCode: "SIN",
+    toName: "Changi International Airport, Singapore",
+    toDate: "20 Feb 2026",
+    flightNo: "QL123",
+    zone: "1",
+    seq: "023",
+    boardingTime: "21:14",
+    departTime: "14:54",
+    departDate: "Thu • 19 Feb 2026",
+    arriveTime: "17:54",
+    arriveDate: "Fri • 20 Feb 2026",
+};

@@ -14,9 +14,6 @@ type CheckInState = {
   setSelectedPassengerIds: (ids: string[]) => void;
 
   upsertPassengerForm: (passengerId: string, form: PassengerForm) => void;
-
-  // helper
-  getSelectedPassengers: () => Passenger[];
 };
 
 export const useCheckInStore = create<CheckInState>((set, get) => ({
@@ -29,9 +26,4 @@ export const useCheckInStore = create<CheckInState>((set, get) => ({
 
   upsertPassengerForm: (passengerId, form) =>
     set((s) => ({ passengerForms: { ...s.passengerForms, [passengerId]: form } })),
-
-  getSelectedPassengers: () => {
-    const { passengers, selectedPassengerIds } = get();
-    return passengers.filter((p) => selectedPassengerIds.includes(p.id));
-  },
 }));

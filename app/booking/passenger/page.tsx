@@ -114,7 +114,6 @@ export default function PassengerDetailsStep() {
     const router = useRouter();
     const countries: CountryOption[] = useMemo(() => MOCK_CONTRIES, []);
 
-    // const passengers = useCheckInStore((s) => s.getSelectedPassengers());
     const passengers = useCheckInStore(
         useShallow((s) =>
             s.passengers.filter((p) => s.selectedPassengerIds.includes(p.id))
@@ -136,7 +135,7 @@ export default function PassengerDetailsStep() {
     const handleBack = () => router.back();
 
     const handleContinue = () => {
-        // forms already saved in store via upsertPassengerForm
+        console.log("Saving data...", passengerForms);
         router.push("/booking/dangerous");
     };
 

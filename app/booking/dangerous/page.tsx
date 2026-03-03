@@ -23,7 +23,7 @@ export default function Dangerous() {
   };
 
   const handleContinue = () => {
-    router.push("/next-step");
+    router.push("/booking/boarding");
   };
 
   return (
