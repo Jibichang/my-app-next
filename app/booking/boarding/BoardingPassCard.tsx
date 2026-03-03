@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import AppleIcon from "@mui/icons-material/Apple";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
-import { Passenger, PassengerForm, BoardingPassData } from "../bookingData";
+import { Passenger, PassengerForm, BoardingPassData } from "../checkinModel";
 
 
 

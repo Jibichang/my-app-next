@@ -7,8 +7,6 @@ import {
   Divider,
   Stack,
   Typography,
-  Checkbox,
-  FormControlLabel,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import BookingTemplate from "../BookingTemplate";
@@ -33,7 +31,6 @@ export default function Dangerous() {
         subtitle: "Dangerous Goods",
         step: 4,
         totalSteps: 5,
-        onClose: () => router.back(),
       }}
       bottomBar={
         <BookingBottomBar

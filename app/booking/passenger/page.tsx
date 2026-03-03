@@ -16,7 +16,7 @@ import BookingBottomBar from "../BookingBottomBar";
 import { useRouter } from "next/navigation";
 
 import { useCheckInStore } from "../checkinStore";
-import { CountryOption, Passenger, PassengerForm, MOCK_CONTRIES } from "../bookingData";
+import { CountryOption, Passenger, PassengerForm, MOCK_CONTRIES } from "../checkinModel";
 
 const fieldSx = {
     "& .MuiOutlinedInput-root": {
@@ -146,7 +146,6 @@ export default function PassengerDetailsStep() {
                 subtitle: "Passenger Details",
                 step: 3,
                 totalSteps: 5,
-                onClose: () => router.back(),
             }}
             bottomBar={<BookingBottomBar onBack={handleBack} onContinue={handleContinue} isValid={isValid} />}
         >

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -21,6 +22,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useRouter } from "next/navigation";
 
 type NavItem = { label: string; href?: string; active?: boolean };
 
@@ -88,6 +90,16 @@ function IconPill({ children }: { children: React.ReactNode }) {
 }
 
 export default function Dashboard() {
+  const router = useRouter();
+
+  const handleDone = () => {
+    router.push("/booking/check_in");
+  };
+
+  const [lastName, setLastName] = useState("");
+  const [pnr, setPnr] = useState("");
+  const isFormValid = lastName.trim() !== "" && pnr.trim() !== "";
+
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#F6F9FC" }} suppressHydrationWarning>
       {/* Top Nav */}
@@ -181,6 +193,8 @@ export default function Dashboard() {
                     <TextField
                       fullWidth
                       placeholder="Your last name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                       InputProps={{ sx: { borderRadius: 2, bgcolor: "white" } }}
                     />
                   </Box>
@@ -192,6 +206,8 @@ export default function Dashboard() {
                     <TextField
                       fullWidth
                       placeholder="ABC123 OR 1234567890123"
+                      value={pnr}
+                      onChange={(e) => setPnr(e.target.value)}
                       InputProps={{ sx: { borderRadius: 2, bgcolor: "white" } }}
                     />
                   </Box>
@@ -199,32 +215,26 @@ export default function Dashboard() {
                   <Button
                     fullWidth
                     variant="contained"
+                    disabled={!isFormValid}
+                    onClick={handleDone}
                     sx={{
                       py: 1.35,
                       borderRadius: 2,
                       textTransform: "none",
                       fontWeight: 800,
-                      bgcolor: "#8FB7D8",
-                      "&:hover": { bgcolor: "#7FAED4" },
+                      bgcolor: isFormValid ? "#4A8BB2" : "#8FB7D8",
+                      color: "white",
+                      "&:hover": {
+                        bgcolor: isFormValid ? "#3A7293" : "#8FB7D8"
+                      },
+                      "&.Mui-disabled": {
+                        bgcolor: "#8FB7D8",
+                        color: "rgba(255, 255, 255, 0.7)"
+                      }
                     }}
                   >
                     Retrieve Booking
                   </Button>
-
-                  <Paper
-                    variant="outlined"
-                    sx={{
-                      borderRadius: 2,
-                      p: 2,
-                      bgcolor: "#F2F8FF",
-                      borderColor: "#D6E7FF",
-                    }}
-                  >
-                    <Typography fontSize={13} color="#374151">
-                      <b>Tip:</b> Online check-in opens 24 hours before departure and closes 2 hours
-                      before departure.
-                    </Typography>
-                  </Paper>
                 </Stack>
               </CardContent>
             </Card>

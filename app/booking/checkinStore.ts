@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Passenger, PassengerForm } from "./bookingData";
+import { Passenger, PassengerForm } from "./checkinModel";
 
 
 type CheckInState = {
@@ -14,6 +14,14 @@ type CheckInState = {
   setSelectedPassengerIds: (ids: string[]) => void;
 
   upsertPassengerForm: (passengerId: string, form: PassengerForm) => void;
+
+  resetStore: () => void;
+};
+
+const initialState = {
+  selectedPassengerIds: [],
+  passengers: [],
+  passengerForms: {},
 };
 
 export const useCheckInStore = create<CheckInState>((set, get) => ({
@@ -26,4 +34,6 @@ export const useCheckInStore = create<CheckInState>((set, get) => ({
 
   upsertPassengerForm: (passengerId, form) =>
     set((s) => ({ passengerForms: { ...s.passengerForms, [passengerId]: form } })),
+
+  resetStore: () => set(initialState),
 }));

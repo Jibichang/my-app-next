@@ -8,7 +8,7 @@ import BookingTemplate from "../BookingTemplate";
 import BookingBottomBar from "../BookingBottomBar";
 import { useRouter } from "next/navigation";
 import { useCheckInStore } from "../checkinStore";
-import { Passenger, MOCK_PASSENGERS } from "../bookingData";
+import { Passenger, MOCK_PASSENGERS } from "../checkinModel";
 
 function PassengerSelectRow({
     passenger,
@@ -153,7 +153,6 @@ export default function CheckIn() {
                 subtitle: "Select Passengers",
                 step: 2,
                 totalSteps: 5,
-                onClose: () => console.log("close"),
             }}
             bottomBar={
                 <BookingBottomBar

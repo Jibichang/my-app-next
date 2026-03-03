@@ -3,7 +3,8 @@ import {
     Container,
     Paper,
 } from "@mui/material";
-import { StepHeader } from "./StepView";
+import { StepHeader } from "./BookingStepHeader";
+import { useRouter } from "next/navigation";
 
 export type StepHeaderProps = {
     title: string;
@@ -13,13 +14,23 @@ export type StepHeaderProps = {
     onClose?: () => void;
 };
 
-type StepLayoutProps = {
+type BookingTemplateProps = {
     header: StepHeaderProps;
     children: React.ReactNode;
     bottomBar?: React.ReactNode;
 };
 
-export default function BookingTemplate({ header, children, bottomBar }: StepLayoutProps) {
+export default function BookingTemplate({ header, children, bottomBar }: BookingTemplateProps) {
+    const router = useRouter();
+
+    const handleClose = () => {
+        if (header.onClose) {
+            header.onClose();
+        } else {
+            router.push("/dashboard");
+        }
+    };
+
     return (
         <Box
             sx={{
@@ -31,7 +42,13 @@ export default function BookingTemplate({ header, children, bottomBar }: StepLay
             }}
         >
             <Box sx={{ flexShrink: 0 }}>
-                <StepHeader {...header} />
+                <StepHeader
+                    title={header.title}
+                    subtitle={header.subtitle}
+                    step={header.step}
+                    totalSteps={header.totalSteps}
+                    onClose={handleClose}
+                />
             </Box>
 
             {/* 2. Content Area */}

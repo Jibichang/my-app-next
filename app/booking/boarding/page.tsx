@@ -5,7 +5,7 @@ import { Button, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 import BookingTemplate from "../BookingTemplate";
 import { useCheckInStore } from "../checkinStore";
-import { BoardingPassData } from "../bookingData";
+import { BoardingPassData } from "../checkinModel";
 import { BoardingPassCard } from "./BoardingPassCard";
 
 export default function Boarding() {
@@ -31,8 +31,10 @@ export default function Boarding() {
         arriveDate: "Fri • 20 Feb 2026",
     };
 
+    const resetStore = useCheckInStore((s) => s.resetStore);
     const handleDone = () => {
-        // router.push("/");
+        resetStore();
+        router.push("/dashboard");
     };
 
     const selectedPassengers = useCheckInStore(
@@ -49,7 +51,6 @@ export default function Boarding() {
                 subtitle: "Boarding Pass",
                 step: 5,
                 totalSteps: 5,
-                onClose: () => router.back(),
             }}
             bottomBar={
                 <Button
